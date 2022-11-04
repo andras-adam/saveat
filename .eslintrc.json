@@ -1,6 +1,7 @@
 {
   "extends": [ "plugin:@danifoldi/eslint-presets/react-native-ts" ],
   "rules": {
-    "unicorn/consistent-function-scoping": "off"
+    "unicorn/consistent-function-scoping": "off",
+    "unicorn/no-abusive-eslint-disable": "off"
   }
 }

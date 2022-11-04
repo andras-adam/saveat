@@ -1,8 +1,8 @@
-// eslint-disable-next-line unicorn/prefer-module
+/* eslint-disable */
 module.exports = api => {
   api.cache(true)
   return {
     presets: [ 'babel-preset-expo' ],
-    plugins: [ 'react-native-reanimated/plugin' ]
+    plugins: [ 'react-native-reanimated/plugin', 'module:react-native-dotenv' ]
   }
 }
