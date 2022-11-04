@@ -1,0 +1,162 @@
+/* eslint-disable sort-keys */
+// This if here because chanign the order in which the functions are exported is cumbersome and time consuming
+import { getFirestore, collection, addDoc, GeoPoint, getDocs, doc, getDoc } from 'firebase/firestore'
+import { app } from '../../../firebase'
+
+
+const db = getFirestore(app)
+
+//  Adding datatypes
+interface UserDataType {
+    email: string
+    geopoint?: GeoPoint
+    location?: string
+    name: string
+    phoneno: string
+    type: boolean
+}
+
+interface DishDataType {
+    amount: number
+    category: string
+    discount: number
+    ingredients: Array<string>
+    name: string
+    price: number
+}
+interface OrderDataType {
+    clientID: string
+    dishID: string
+    estimatedTime: number
+    restaurantid: string
+    status: boolean
+    transport: string
+}
+interface RestaurantDataType {
+    geopoint: GeoPoint
+    location: string
+    name: string
+    ownerid: string
+}
+const addUser = async (userData: UserDataType) => {
+  try {
+    const docRef = await addDoc(collection(db, 'users'), {
+      email: userData.email,
+      geopoint: userData.geopoint,
+      location: userData.location,
+      name: userData.name,
+      phoneno: userData.phoneno,
+      type: true
+    })
+    console.log('Document written with ID:', docRef.id)
+  } catch (error) {
+    console.error('Error adding document:', error)
+  }
+}
+
+const getUsers = async () => {
+  const querySnapshot = await getDocs(collection(db, 'users'))
+  querySnapshot.forEach(doc => {
+    console.log(`${doc.id} => ${doc.data()}`)
+  })
+  return querySnapshot.forEach(element => element.data() as UserDataType)
+}
+
+const getUser = async (id: string) => {
+  const docRef = doc(db, 'users', id)
+  const docSnap = await getDoc(docRef)
+  return docSnap.data() as UserDataType
+}
+
+const addDish = async (dish: DishDataType) => {
+  try {
+    const docRef = await addDoc(collection(db, 'users'), {
+      amount: dish.amount,
+      category: dish.category,
+      discount: dish.discount,
+      ingredients: dish.ingredients,
+      name: dish.name,
+      price: dish.price
+    })
+    console.log('Document written with ID:', docRef.id)
+  } catch (error) {
+    console.error('Error adding document:', error)
+  }
+}
+
+const getDishes = async () => {
+  const querySnapshot = await getDocs(collection(db, 'dishes'))
+  querySnapshot.forEach(doc => {
+    console.log(`${doc.id} => ${doc.data()}`)
+  })
+  return querySnapshot.forEach(element => element.data() as DishDataType)
+}
+
+const getDish = async (id: string) => {
+  const docRef = doc(db, 'dishes', id)
+  const docSnap = await getDoc(docRef)
+  return docSnap.data() as RestaurantDataType
+}
+
+const addOrder = async (order: OrderDataType) => {
+  try {
+    const docRef = await addDoc(collection(db, 'users'), {
+      clientID: order.clientID,
+      dishID: order.dishID,
+      estimatedTime: order.estimatedTime,
+      restaurantid: order.restaurantid,
+      status: order.status,
+      transport: order.transport
+    })
+    console.log('Document written with ID:', docRef.id)
+  } catch (error) {
+    console.error('Error adding document:', error)
+  }
+}
+
+const getOrders = async () => {
+  const querySnapshot = await getDocs(collection(db, 'orders'))
+  querySnapshot.forEach(doc => {
+    console.log(`${doc.id} => ${doc.data()}`)
+  })
+  return querySnapshot.forEach(element => element.data() as OrderDataType)
+}
+
+const getOrder = async (id: string) => {
+  const docRef = doc(db, 'orders', id)
+  const docSnap = await getDoc(docRef)
+  return docSnap.data() as OrderDataType
+}
+
+const addRestaurant = async (restaurant: RestaurantDataType) => {
+  try {
+    const docRef = await addDoc(collection(db, 'users'), {
+      geopoint: restaurant.geopoint,
+      location: restaurant.location,
+      name: restaurant.name,
+      ownerid: restaurant.ownerid
+    })
+    console.log('Document written with ID:', docRef.id)
+  } catch (error) {
+    console.error('Error adding document:', error)
+  }
+}
+
+const getRestaurants = async () => {
+  const querySnapshot = await getDocs(collection(db, 'restaurants'))
+  querySnapshot.forEach(doc => {
+    console.log(`${doc.id} => ${doc.data()}`)
+  })
+  return querySnapshot.forEach(element => element.data() as RestaurantDataType)
+}
+
+const getRestaurant = async (id: string) => {
+  const docRef = doc(db, 'restaurants', id)
+  const docSnap = await getDoc(docRef)
+  return docSnap.data() as RestaurantDataType
+}
+
+export default {
+  addDish, addOrder, addUser, getDish, getDishes, getUser,
+  getOrder, getUsers, getOrders, addRestaurant, getRestaurant, getRestaurants
+}

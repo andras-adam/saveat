@@ -5,6 +5,7 @@ import { app } from '../../../firebase'
 import { useAuth } from '../../hooks/useAuth'
 
 
+
 const styles = StyleSheet.create({
   container: {
     padding: 20
@@ -12,8 +13,8 @@ const styles = StyleSheet.create({
 })
 
 function test() {
-  // const auth = getAuth(app)
-  // console.log(auth.app)
+  const auth = getAuth(app)
+  console.log(auth.app)
 }
 
 export default function SignInScreen() {
