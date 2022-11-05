@@ -1,9 +1,25 @@
+import * as Location from 'expo-location'
+import { LocationObject } from 'expo-location'
+import { useState } from 'react'
+
+
 const baseUrl = 'https://daas-public-api.development.dev.woltapi.com'
 const merchantId = '6364e0048018ce361efafc95'
 const apiKey = '_Io093_dDmZHeaxLBgzP-p-4as6Lo7obMfo_LlyfK2I'
 const headers = { 'content-type': 'application/json', 'authorization': `Bearer ${apiKey}` }
 
-export async function deliveryFee(pickupAddress: string, dropoffAddress: string) {
+export async function DeliveryFee(pickupAddress: string, dropoffAddress: string) {
+  const [ LocationSet, SetLocation ] = useState<LocationObject | null>(null)
+
+  const { status } = await Location.requestForegroundPermissionsAsync()
+  if (status !== 'granted') {
+    console.log('Permission to access location was denied')
+    return
+  }
+
+  const currentLocation = await Location.getCurrentPositionAsync({})
+  SetLocation(currentLocation)
+
   const pathname = `/merchants/${merchantId}/delivery-fee`
   const data = {
     pickup: {
@@ -13,9 +29,224 @@ export async function deliveryFee(pickupAddress: string, dropoffAddress: string)
     },
     dropoff: {
       location: {
-        formatted_address: dropoffAddress
+        formatted_address: dropoffAddress,
+        coordinates: {
+          lat: LocationSet?.coords.latitude,
+          lon: LocationSet?.coords.longitude
+        }
       }
     }
+  }
+  const body = JSON.stringify(data)
+  const result = await fetch(baseUrl + pathname, { method: 'POST', headers, body })
+  return result.json()
+}
+
+export async function DeliveryOrder(
+  merchant_id: string, pickupAddress: string, pickupComment: string, name: string, phoneno: string, address: string,
+  pickupLocation: LocationObject, contactName: string, contactPhoneno: string, dropoffComment: string,
+  supportEmail: string, supportPhoneNo: string, supportUrl: string, merchant_order_reference_id: string,
+  contentsDescriptions: string, contentsID: string, contentsTags: string, contentsCount: number,
+  tipsPreDelivery: string, tipsAmount: number, tipsCurrency: string, minPreparation: number, scheduledTime: string
+) {
+
+  const [ location, setLocation ] = useState<LocationObject | null>(null)
+
+  const { status } = await Location.requestForegroundPermissionsAsync()
+  if (status !== 'granted') {
+    console.log('Permission to access location was denied')
+    return
+  }
+
+  const currentLocation = await Location.getCurrentPositionAsync({})
+  setLocation(currentLocation)
+
+  const pathname = `/merchants/${merchant_id}/delivery-order`
+  const data = {
+    pickup: {
+      location: {
+        formatted_address: pickupAddress,
+        coordinates: {
+          lat: pickupLocation.coords.latitude,
+          lon: pickupLocation.coords.longitude
+        }
+      },
+      comment: pickupComment,
+      contact_details: {
+        name: name,
+        phone_number: phoneno,
+        send_tracking_link_sms: true
+      }
+    },
+    dropoff: {
+      location: {
+        formatted_address: address,
+        coordinates: {
+          lat: location?.coords.latitude,
+          lon: location?.coords.longitude
+        }
+      },
+      contact_details: {
+        name: contactName,
+        phone_number: contactPhoneno,
+        send_tracking_link_sms: true
+      },
+      comment: dropoffComment
+    },
+    customer_support: {
+      email: supportEmail,
+      phone_number: supportPhoneNo,
+      url: supportUrl
+    },
+    merchant_order_reference_id: merchant_order_reference_id,
+    is_no_contact: true,
+    contents: [
+      {
+        count: contentsCount,
+        description: contentsDescriptions,
+        identifier: contentsID,
+        tags: [ contentsTags ]
+      }
+    ],
+    tips: [
+      {
+        type: tipsPreDelivery,
+        price: {
+          amount: tipsAmount,
+          currency: tipsCurrency
+        }
+      }
+    ],
+    min_preparation_time_minutes: minPreparation,
+    scheduled_dropoff_time: scheduledTime
+  }
+  const body = JSON.stringify(data)
+  const result = await fetch(baseUrl + pathname, { method: 'POST', headers, body })
+  return result.json()
+}
+
+export async function Deliveries(
+  minPreparation: number, pickupComment: string, dropoffComment: string, dropoffTime: string, priceAmount: number,
+  priceCurrency: string, recipientName: string, recipientPhoneNo: string, recipientMail: string, parcelWeight: number,
+  parcelWidth: number, parcelHeight: number, parceldepth: number, parcelDescription: string, parcelID: string,
+  parcelAge: number, parcelIDVer: string, parcelTags: string, shipment_promise_id: string,
+  supportEmail: string, supportPhoneNo: string, supportUrl: string, merchant_order_reference_id: string,
+  smsRecieved: string, smsPickedUp: string, tipsType: string,  tipsAmount: number, tipsCurrency: string
+
+
+) {
+  const [ LocationSet, SetLocation ] = useState<LocationObject | null>(null)
+
+  const { status } = await Location.requestForegroundPermissionsAsync()
+  if (status !== 'granted') {
+    console.log('Permission to access location was denied')
+    return
+  }
+
+  const currentLocation = await Location.getCurrentPositionAsync({})
+  SetLocation(currentLocation)
+
+  const pathname = `/merchants/${merchantId}/delivery-fee`
+  const data
+    = {
+      pickup: {
+        options: {
+          min_preparation_time_minutes: minPreparation
+        },
+        comment: pickupComment
+      },
+      dropoff: {
+        location: {
+          coordinates: {
+            lat: LocationSet?.coords.latitude,
+            lon: LocationSet?.coords.longitude
+          }
+        },
+        comment: dropoffComment,
+        options: {
+          is_no_contact: false,
+          scheduled_time: dropoffTime
+        }
+      },
+      price: {
+        amount: priceAmount,
+        currency: priceCurrency
+      },
+      recipient: {
+        name: recipientName,
+        phone_number: recipientPhoneNo,
+        email: recipientMail
+      },
+      parcels: [
+        {
+          dimensions: {
+            weight_gram: parcelWeight,
+            width_cm: parcelWidth,
+            height_cm: parcelHeight,
+            depth_cm: parceldepth
+          },
+          description: parcelDescription,
+          identifier: parcelID,
+          dropoff_restrictions: {
+            age_limit: parcelAge,
+            identity_verification: {
+              name: parcelIDVer
+            }
+          },
+          tags: [ parcelTags ]
+        }
+      ],
+      shipment_promise_id: shipment_promise_id,
+      customer_support: {
+        url: supportUrl,
+        email: supportEmail,
+        phone_number: supportPhoneNo
+      },
+      merchant_order_reference_id: merchant_order_reference_id,
+      sms_notifications: {
+        received: smsRecieved,
+        picked_up: smsPickedUp
+      },
+      tips: [
+        {
+          type: tipsType,
+          price: {
+            amount: tipsAmount,
+            currency: tipsCurrency
+          }
+        }
+      ]
+    }
+  const body = JSON.stringify(data)
+  const result = await fetch(baseUrl + pathname, { method: 'POST', headers, body })
+  return result.json()
+}
+
+export async function ShipmentPromises(
+  street: string, city: string, post_code: string,
+  language: string, minTime: number, scheduledTime: string
+) {
+  const [ LocationSet, SetLocation ] = useState<LocationObject | null>(null)
+
+  const { status } = await Location.requestForegroundPermissionsAsync()
+  if (status !== 'granted') {
+    console.log('Permission to access location was denied')
+    return
+  }
+
+  const currentLocation = await Location.getCurrentPositionAsync({})
+  SetLocation(currentLocation)
+
+  const pathname = `/merchants/${merchantId}/delivery-fee`
+  const data = {
+    street: street,
+    city: city,
+    post_code: post_code,
+    lat: LocationSet?.coords.latitude,
+    lon: LocationSet?.coords.longitude,
+    language: language,
+    min_preparation_time_minutes: minTime,
+    scheduled_dropoff_time: scheduledTime
   }
   const body = JSON.stringify(data)
   const result = await fetch(baseUrl + pathname, { method: 'POST', headers, body })
