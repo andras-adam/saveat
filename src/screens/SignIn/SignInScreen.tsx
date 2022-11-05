@@ -3,6 +3,7 @@ import { Button, StyleSheet, Text, View } from 'react-native'
 import { getAuth } from 'firebase/auth'
 import { app } from '../../../firebase'
 import { useAuth } from '../../hooks/useAuth'
+import React from 'react'
 
 
 const styles = StyleSheet.create({
