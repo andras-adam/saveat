@@ -1,16 +1,13 @@
-/* eslint-disable @typescript-eslint/member-ordering */
-/* eslint-disable sort-keys */
-// This if here because chanign the order in which the functions are exported is cumbersome and time consuming
 import { getFirestore, collection, addDoc, GeoPoint, getDocs, doc, getDoc, setDoc, initializeFirestore, Firestore, updateDoc } from 'firebase/firestore'
-import { getStorage, getStream, ref} from 'firebase/storage'
-import { app } from '../../../firebase'
+import { getStorage, getStream, ref } from 'firebase/storage'
+import { app } from '../../firebase'
 
 
 const db = getFirestore(app)
 const storage = getStorage(app)
 
 //  Adding datatypes
-interface UserDataType {
+export interface UserDataType {
   email: string
   geopoint?: GeoPoint
   location?: string
@@ -19,7 +16,7 @@ interface UserDataType {
   type: boolean
 }
 
-interface DishDataType {
+export interface DishDataType {
   amount: number
   category: string
   discount: number
@@ -27,7 +24,7 @@ interface DishDataType {
   name: string
   price: number
 }
-interface OrderDataType {
+export interface OrderDataType {
   clientID: string
   dishID: string
   estimatedTime: number
@@ -35,7 +32,7 @@ interface OrderDataType {
   status: boolean
   transport: string
 }
-interface RestaurantDataType {
+export interface RestaurantDataType {
   restaurantId: string
   geopoint: GeoPoint
   location: string
@@ -137,7 +134,7 @@ const getOrder = async (id: string) => {
 const addRestaurant = async (restaurant: RestaurantDataType) => {
   try {
     const docRef = await addDoc(collection(db, 'restaurants'), {
-      restaurantId: "0",
+      restaurantId: '0',
       geopoint: restaurant.geopoint,
       location: restaurant.location,
       name: restaurant.name,

@@ -1,13 +1,10 @@
-/* eslint-disable unicorn/prefer-module */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useNavigation } from '@react-navigation/native'
-import { GeoPoint } from 'firebase/firestore'
-import { Card, FlatList, HStack, Image, Pressable, Spacer, VStack, Text, Icon } from 'native-base'
-import { useState, useEffect } from 'react'
+import { Card, FlatList, HStack, Image, Pressable, Spacer, VStack, Text } from 'native-base'
+import { useState, useEffect, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { colors } from '../../assets/colors'
-import { addRestaurant, getDishes, getRestaurants } from '../SignIn/firebaseHelper'
+import { getDishes, getRestaurants } from '../../api/firebaseHelper'
 
 
 const defaultImage = 'https://citinewsroom.com/wp-content/uploads/2021/07/Food.jpg'
@@ -27,20 +24,21 @@ const RestaurantList = ({ data }) => {
 }
 
 const RestaurantTile = ({ info }) => {
-  const [hasLeftover, setHasLeftover] = useState(false)
+  const [ hasLeftover, setHasLeftover] = useState(false)
   const navigation = useNavigation()
-  const checkHasLeftover = async () => {
+
+  const checkHasLeftover = useCallback(async () => {
     const dishes = await getDishes(info.restaurantId)
     if (dishes.length === 0) {
       return
     }
     const leftoverCount = dishes.filter(dish => dish.isLeftover).length
     setHasLeftover(leftoverCount > 0)
-  }
+  }, [ info.restaurantId ])
 
   useEffect(() => {
     checkHasLeftover()
-  }, [])
+  }, [ checkHasLeftover ])
 
   return (
     <Pressable py={2} onPress={() => navigation.navigate('Restaurant', { restaurantId: info.restaurantId })}>
@@ -49,7 +47,7 @@ const RestaurantTile = ({ info }) => {
           <Image borderRadius={12} w={'100%'} h={'100'} source={{ uri: info.picUrl }} alt="food" />
           <Spacer h={2} />
           <HStack justifyContent={'space-between'} py={1}>
-            <HStack alignItems={'bottom'}>
+            <HStack>
               <Text color={'white'}>{info.name}</Text>
               {hasLeftover && <Image size={"5"} source={require('../../assets/leaf.png')} alt='leaf' />}
             </HStack>
@@ -63,45 +61,6 @@ const RestaurantTile = ({ info }) => {
 
 export default function RestaurantsScreen() {
   const [ restaurants, setRestaurants ] = useState()
-
-  // const data = [
-  //   {
-  //     name: 'Venue name',
-  //     picId: '',
-  //     timeEstimate: [ 20, 35 ],
-  //     restaurantId: 'id'
-  //   },
-  //   {
-  //     name: 'Venue name',
-  //     picId: '',
-  //     timeEstimate: [ 20, 35 ],
-  //     restaurantId: 'id'
-  //   },
-  //   {
-  //     name: 'Venue name',
-  //     picId: '',
-  //     timeEstimate: [ 20, 35 ],
-  //     restaurantId: 'id'
-  //   },
-  //   {
-  //     name: 'Venue name',
-  //     picId: '',
-  //     timeEstimate: [ 20, 35 ],
-  //     restaurantId: 'id'
-  //   },
-  //   {
-  //     name: 'Venue name',
-  //     picId: '',
-  //     timeEstimate: [ 20, 35 ],
-  //     restaurantId: 'id'
-  //   },
-  //   {
-  //     name: 'Venue name',
-  //     picId: '',
-  //     timeEstimate: [ 20, 35 ],
-  //     restaurantId: 'id'
-  //   },
-  // ]
 
   const fetchRestaurants = async () => {
     try {
@@ -122,27 +81,9 @@ export default function RestaurantsScreen() {
     }
   }
 
-  // const insertRestaurant = async () => {
-  //   try {
-  //     const data = {
-  //       restaurantId: '',
-  //       geopoint: new GeoPoint(0, 0),
-  //       location: 'Helsinki',
-  //       name: 'Some name',
-  //       ownerid: '',
-  //       picUrl: defaultImage
-  //     }
-  //     await addRestaurant(data)
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
-
   useEffect(() => {
     fetchRestaurants()
-    // insertRestaurant()
   }, [])
-
 
   return (
     <View style={styles.container}>

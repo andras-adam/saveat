@@ -3,12 +3,12 @@
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable unicorn/prefer-module */
 /* eslint-disable react/prop-types */
-import { Image, VStack, HStack, Card, Box, Input, FlatList, Pressable, ScrollView, ZStack, Spacer, Center } from 'native-base'
+import { Image, VStack, HStack, Card, Box, Input, Pressable, ScrollView, Spacer, Center } from 'native-base'
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import { Heart, MagnifyingGlass } from 'phosphor-react-native'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { getDishes, getRestaurant } from '../SignIn/firebaseHelper'
+import { getDishes, getRestaurant } from '../../api/firebaseHelper'
 import { colors } from '../../assets/colors'
 
 
@@ -16,10 +16,8 @@ const RestaurantHeaderImage = () => {
   const h = Dimensions.get('window').height
   const w = Dimensions.get('window').width
 
-
   return (
     <VStack>
-      <Text></Text>
       <Image
         style={{ height: h / 6, width: w }}
         source={{
@@ -107,44 +105,11 @@ const styles = StyleSheet.create({
   }
 })
 
-
-const menu = [
-  {
-    name: 'Food item',
-    description: 'A brief description of the dish and what it contains, and a bunch of other things the customer wont read because they care more about the pic',
-    price: '0.00€'
-  },
-
-  {
-    name: 'Food item',
-    description: 'A brief description of the dish and what it contains, and a bunch of other things the customer wont read because they care more about the pic',
-    price: '0.00€'
-  },
-
-  {
-    name: 'Food item',
-    description: 'A brief description of the dish and what it contains, and a bunch of other things the customer wont read because they care more about the pic',
-    price: '0.00€'
-  },
-
-  {
-    name: 'Food item',
-    description: 'A brief description of the dish and what it contains, and a bunch of other things the customer wont read because they care more about the pic',
-    price: '0.00€'
-  },
-
-  {
-    name: 'Food item',
-    description: 'A brief description of the dish and what it contains, and a bunch of other things the customer wont read because they care more about the pic',
-    price: '0.00€'
-  }
-]
-
 const BottomButton = ({ selectedItems, onPress }) => {
   const total = selectedItems.map(element => element.price).reduce((partialSum, a) => partialSum + a, 0)
 
   return (
-    <Pressable onPress={() => onPress()} w={'100%'} >
+    <Pressable onPress={onPress} w={'100%'}>
       <Card borderRadius={12} w='100%' bgColor={colors.button}>
         <HStack alignItems={'center'}>
           <Card borderRadius={'100%'} p={3} bgColor={'black'} mr={6}>
@@ -152,42 +117,33 @@ const BottomButton = ({ selectedItems, onPress }) => {
               <Text style={{ fontWeight: 'bold', color: colors.button }}>{selectedItems.length}</Text>
             </Center>
           </Card>
-          <Text style={{ fontWeight: 'bold', color: 'black', fontSize: '22' }}>View order</Text>
+          <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 22 }}>View order</Text>
           <Spacer flex={1} />
-          <Text style={{ fontWeight: 'bold', color: 'black', fontSize: '22' }}>{`${total}€`}</Text>
+          <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 22 }}>{`${total}€`}</Text>
         </HStack>
       </Card>
     </Pressable>
   )
 }
 
-
 export default function RestaurantScreen() {
   const navigation = useNavigation()
-  const [dishes, setDishes] = useState()
-  const [selected, setSelected] = useState([])
-  const [restaurantInfo, setRestaurantInfo] = useState()
   const route = useRoute()
   const restaurantId = route.params.restaurantId
+  const [ dishes, setDishes ] = useState([])
+  const [ selected, setSelected ] = useState([])
+  const [ restaurantInfo, setRestaurantInfo ] = useState()
   const h = Dimensions.get('window').height
   const w = Dimensions.get('window').width
 
-  const fetchDishes = async () => {
+  const fetchDishes = useCallback(async () => {
     try {
-      const dishes = await getDishes(restaurantId)
-      setDishes(dishes)
+      const result = await getDishes(restaurantId)
+      setDishes(result)
     } catch (error) {
       console.error(error)
     }
-  }
-
-  const onSelect = dish => {
-    if (selected.includes(dish)) {
-      setSelected([...selected.filter(e => e !== dish)])
-    } else {
-      setSelected([...selected, dish])
-    }
-  }
+  }, [ restaurantId ])
 
   const fetchRestaurant = async () => {
     try {
@@ -198,29 +154,18 @@ export default function RestaurantScreen() {
     }
   }
 
-  // const insertDish = async (menu) => {
-  //   try {
-  //     const data = {
-  //       amount: 1,
-  //       category: "food",
-  //       discount: "0.3",
-  //       description: menu.description,
-  //       name: menu.name,
-  //       price: menu.price
-  //     }
-  //     await addDish(data, 'adozznOOPHHmHzcW0yxj')
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
+  const onSelect = useCallback(dish => {
+    setSelected(currentlySelected => {
+      return currentlySelected.includes(dish)
+        ? [ ...currentlySelected.filter(e => e !== dish) ]
+        : [ ...currentlySelected, dish ]
+    })
+  }, [])
 
   useEffect(() => {
-    // menu.forEach(element => {
-    //   insertDish(element)
-    // })
     fetchDishes()
     fetchRestaurant()
-  }, [])
+  }, [ fetchDishes, fetchRestaurant ])
 
   return (
     <View style={styles.container}>
@@ -234,7 +179,7 @@ export default function RestaurantScreen() {
       </ScrollView>
       {(selected.length > 0) && (
         <Center w={w} px={4} style={{ position: 'absolute', bottom: 10 }} >
-          <BottomButton style={{ width: '100%' }} selectedItems={selected} onPress={() => navigation.navigate('Order', { dishes: selected })} />
+          <BottomButton selectedItems={selected} onPress={() => navigation.navigate('Order', { dishes: selected })} />
         </Center>
       )}
     </View>
