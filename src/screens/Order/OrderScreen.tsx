@@ -1,32 +1,29 @@
-import { StyleSheet, Text, View } from 'react-native'
-import { Button } from 'native-base'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { Button, ScrollView } from 'native-base'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import { getTotalPriceForOrderItems } from '../../utils/utils'
 import { OrderItem } from '../../types/types'
-import OrderListItem from './OrderListItem'
-import { useEffect } from 'react'
 import { DishDataType } from '../SignIn/firebaseHelper'
+import OrderListItem from './OrderListItem'
 
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20
+    backgroundColor: '#ffffff'
   },
-  total: {
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginBottom: 20
+  actionButtonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0
   },
-  totalSegment: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+  actionButton: {
+    margin: 20
   }
 })
 
-const orderItems: OrderItem[] = [
+const mockOrderItems: OrderItem[] = [
   { id: '0', title: 'Salad', unitPrice: 5.99, amount: 1 },
   { id: '1', title: 'Rice', unitPrice: 4.25, amount: 1 },
   { id: '2', title: 'Beef', unitPrice: 12.49, amount: 1 }
@@ -36,14 +33,13 @@ export default function OrderScreen() {
   const { navigate } = useNavigation<any>()
   const route = useRoute<any>()
   const dishes = route.params.dishes as DishDataType[]
-  const orderItems = dishes.map((e, index) => {
-    return {
-      id: String(index),
-      title: e.name,
-      unitPrice: e.price,
-      amount: 1
-    }
-  })
+  const orderItems = dishes.map((e, index) => ({
+    id: String(index),
+    title: e.name,
+    unitPrice: e.price,
+    amount: 1
+  }))
+
   const [ items, setItems ] = useState<OrderItem[]>(orderItems)
 
   // Change the amount of an order item
@@ -55,37 +51,22 @@ export default function OrderScreen() {
     })
   }
 
-  // Get the total count of all items
-  function getTotalItemCount() {
-    return items.reduce((acc, cur) => acc + cur.amount, 0)
-  }
-
-  // Get the total price of all items
-  function getTotalPrice() {
-    const price = items.reduce((acc, cur) => acc + (cur.unitPrice * cur.amount), 0)
-    return Math.round(price * 100) / 100
-  }
-
   return (
-    <View style={styles.container}>
-      {items.map(item => (
-        <OrderListItem
-          key={item.id}
-          item={item}
-          changeAmount={amount => setAmount(item.id, amount)}
-        />
-      ))}
-      <View style={styles.total}>
-        <View style={styles.totalSegment}>
-          <Text>Total items:</Text>
-          <Text>{getTotalItemCount()} item(s)</Text>
-        </View>
-        <View style={styles.totalSegment}>
-          <Text>Total price:</Text>
-          <Text>€ {getTotalPrice()}</Text>
-        </View>
+    <Fragment>
+      <ScrollView style={styles.container}>
+        {items.map(item => (
+          <OrderListItem
+            key={item.id}
+            item={item}
+            changeAmount={amount => setAmount(item.id, amount)}
+          />
+        ))}
+      </ScrollView>
+      <View style={styles.actionButtonContainer}>
+        <Button style={styles.actionButton} onPress={() => navigate('Checkout', { items })}>
+          {`Go to checkout — € ${getTotalPriceForOrderItems(items)}`}
+        </Button>
       </View>
-      <Button onPress={() => navigate('Checkout')}>Go to checkout</Button>
-    </View>
+    </Fragment>
   )
 }
