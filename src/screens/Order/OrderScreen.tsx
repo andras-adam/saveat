@@ -15,6 +15,8 @@ const styles = StyleSheet.create({
   }
 })
 
+const uri = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80'
+
 export default function OrderScreen() {
   const { navigate } = useNavigation<any>()
   const route = useRoute<any>()
@@ -23,7 +25,8 @@ export default function OrderScreen() {
     id: String(index),
     title: e.name,
     unitPrice: e.price,
-    amount: 1
+    amount: 1,
+    uri
   }))
 
   const [ items, setItems ] = useState<OrderItem[]>(orderItems)

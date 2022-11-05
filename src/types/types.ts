@@ -3,6 +3,7 @@ export interface OrderItem {
   id: string
   title: string
   unitPrice: number
+  uri: string
 }
 
 export enum DeliveryMethod {

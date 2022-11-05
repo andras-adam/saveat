@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image } from 'native-base'
 import { Minus, Plus } from 'phosphor-react-native'
 import { OrderItem } from '../../types/types'
 
@@ -48,6 +49,11 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 12
+  },
+  previewImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 12
   }
 })
 
@@ -79,7 +85,9 @@ export default function OrderListItem({ item, changeAmount }: OrderListItemProps
         ))}
         <Text style={styles.dishPrice}>€ {Math.round((item.amount * item.unitPrice * 100)) / 100}</Text>
       </View>
-      <View style={[ styles.preview, { backgroundColor: '#ffc4c4' }]} />
+      <View style={styles.preview}>
+        <Image style={styles.previewImage} source={{ uri: item.uri }} alt="Dish thumbnail" />
+      </View>
     </View>
   )
 }
