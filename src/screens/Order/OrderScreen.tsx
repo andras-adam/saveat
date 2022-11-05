@@ -1,9 +1,10 @@
+import { Fragment, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button, ScrollView } from 'native-base'
-import { Fragment, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { getTotalPriceForOrderItems } from '../../utils/utils'
 import { OrderItem } from '../../types/types'
+import { DishDataType } from '../SignIn/firebaseHelper'
 import OrderListItem from './OrderListItem'
 
 
@@ -30,7 +31,16 @@ const mockOrderItems: OrderItem[] = [
 
 export default function OrderScreen() {
   const { navigate } = useNavigation<any>()
-  const [ items, setItems ] = useState<OrderItem[]>(mockOrderItems)
+  const route = useRoute<any>()
+  const dishes = route.params.dishes as DishDataType[]
+  const orderItems = dishes.map((e, index) => ({
+    id: String(index),
+    title: e.name,
+    unitPrice: e.price,
+    amount: 1
+  }))
+
+  const [ items, setItems ] = useState<OrderItem[]>(orderItems)
 
   // Change the amount of an order item
   function setAmount(id: string, amount: number) {
