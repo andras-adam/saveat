@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable unicorn/prefer-module */
@@ -145,14 +144,14 @@ export default function RestaurantScreen() {
     }
   }, [ restaurantId ])
 
-  const fetchRestaurant = async () => {
+  const fetchRestaurant = useCallback(async () => {
     try {
       const restaurant = await getRestaurant(restaurantId)
       setRestaurantInfo(restaurant)
     } catch (error) {
       console.error(error)
     }
-  }
+  }, [ restaurantId ])
 
   const onSelect = useCallback(dish => {
     setSelected(currentlySelected => {
