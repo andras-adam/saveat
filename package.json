@@ -17,6 +17,7 @@
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
+    "dotenv": "^16.0.3",
     "expo": "~46.0.16",
     "expo-localization": "~13.1.0",
     "expo-location": "~14.3.0",

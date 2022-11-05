@@ -4,8 +4,8 @@ import { useState } from 'react'
 
 
 const baseUrl = 'https://daas-public-api.development.dev.woltapi.com'
-const merchantId = '6364e0048018ce361efafc95'
-const apiKey = '_Io093_dDmZHeaxLBgzP-p-4as6Lo7obMfo_LlyfK2I'
+const merchantId = process.env.WOLT_MERCHANT_ID
+const apiKey = process.env.WOLT_API_KEY
 const headers = { 'content-type': 'application/json', 'authorization': `Bearer ${apiKey}` }
 
 export async function DeliveryFee(pickupAddress: string, dropoffAddress: string) {

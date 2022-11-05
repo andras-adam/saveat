@@ -10,13 +10,4 @@ const config: FirebaseOptions = {
   storageBucket: process.env.STORAGE_BUCKET
 }
 
-// const config: FirebaseOptions = {
-//   apiKey: "AIzaSyDuhonvNt29Mp93Qkys-_asInVJMIP2-5I",
-//   appId: "1:703063071103:web:a9ecfc4a823f01f3ace24a",
-//   authDomain: "save-it-93faa.firebaseapp.com",
-//   messagingSenderId: "703063071103",
-//   projectId: "save-it-93faa",
-//   storageBucket: "save-it-93faa.appspot.com"
-// }
-
 export const app = initializeApp(config)
