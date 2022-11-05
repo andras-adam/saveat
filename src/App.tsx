@@ -1,7 +1,6 @@
 import { Fragment, useEffect } from 'react'
 import { registerRootComponent } from 'expo'
 import { StatusBar } from 'expo-status-bar'
-import * as Location from 'expo-location'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -75,17 +74,6 @@ function Navigation() {
 }
 
 function App() {
-
-  // Request location permission
-  useEffect(() => {
-    (async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync()
-      if (status !== 'granted') {
-        console.error('Permission to access location was denied')
-      }
-    })()
-  }, [])
-
   return (
     <Fragment>
       <NativeBaseProvider>
