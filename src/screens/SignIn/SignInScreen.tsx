@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
 })
 
 function test() {
-  // const auth = getAuth(app)
-  // console.log(auth.app)
+  const auth = getAuth(app)
+  console.log(auth.app)
 }
 
 export default function SignInScreen() {
