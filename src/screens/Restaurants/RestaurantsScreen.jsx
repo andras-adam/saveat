@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useNavigation } from '@react-navigation/native'
 import { GeoPoint } from 'firebase/firestore'
-import { Card, FlatList, HStack, Image, Pressable, Spacer, VStack } from 'native-base'
+import { Card, FlatList, HStack, Image, Pressable, Spacer, VStack, Text } from 'native-base'
 import { useState, useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { colors } from '../../assets/colors'
 import { addRestaurant, getRestaurants } from '../SignIn/firebaseHelper'
 
@@ -34,8 +34,8 @@ const RestaurantTile = ({ info }) => {
           <Image borderRadius={12} w={'100%'} h={'100'} source={{ uri: info.picUrl }} alt="food" />
           <Spacer h={2} />
           <HStack justifyContent={'space-between'} py={1}>
-            <Text>{info.name}</Text>
-            <Text>{`${info.timeEstimate[0]} - ${info.timeEstimate[1]} min`}</Text>
+            <Text color={'white'}>{info.name}</Text>
+            <Text color={'white'}>{`${info.timeEstimate[0]} - ${info.timeEstimate[1]} min`}</Text>
           </HStack>
         </VStack>
       </Card>
