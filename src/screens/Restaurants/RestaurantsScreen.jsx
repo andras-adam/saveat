@@ -62,8 +62,8 @@ export default function RestaurantsScreen() {
   const fetchRestaurants = async () => {
     try {
       const restaurants = await getRestaurants()
-
-      const data = restaurants.map(element => {
+      const ordered = restaurants.sort((a, b) => b.restaurantId.localeCompare(a.restaurantId))
+      const data = ordered.map(element => {
         return {
           name: element.name,
           picUrl: element.picUrl,
