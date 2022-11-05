@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Buildings, ForkKnife, MagnifyingGlass, UserCircle } from 'phosphor-react-native'
+import React from 'react'
 import SignInScreen from './screens/SignIn/SignInScreen'
 import HomeScreen from './screens/Home/HomeScreen'
 import SearchScreen from './screens/Search/SearchScreen'
@@ -13,7 +14,7 @@ import RestaurantScreen from './screens/Restaurant/RestaurantScreen'
 import RestaurantsScreen from './screens/Restaurants/RestaurantsScreen'
 import CheckoutScreen from './screens/Checkout/CheckoutScreen'
 import { AuthProvider, useAuth } from './hooks/useAuth'
-import React from 'react'
+import { Box, extendTheme, NativeBaseProvider } from 'native-base'
 
 
 const colors = {
@@ -73,12 +74,14 @@ function Navigation() {
 
 function App() {
   return (
-    <Fragment>
-      <AuthProvider>
-        <Navigation />
-      </AuthProvider>
-      <StatusBar style="auto" />
-    </Fragment>
+    <NativeBaseProvider>
+      <Fragment>
+        <AuthProvider>
+          <Navigation />
+        </AuthProvider>
+        <StatusBar style="auto" />
+      </Fragment>
+    </NativeBaseProvider>
   )
 }
 
