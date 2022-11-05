@@ -3,11 +3,11 @@
 /* eslint-disable unicorn/prefer-module */
 /* eslint-disable react/prop-types */
 import { Image, VStack, HStack, Card, Box, Input, Pressable, ScrollView, Spacer, Center } from 'native-base'
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import { Heart, MagnifyingGlass } from 'phosphor-react-native'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { getDishes } from '../../api/firebaseHelper'
+import { getDishes, getRestaurant } from '../../api/firebaseHelper'
 import { colors } from '../../assets/colors'
 
 
@@ -29,10 +29,10 @@ const RestaurantHeaderImage = () => {
   )
 }
 
-const RestaurantName = () => {
+const RestaurantName = ({ name }) => {
   return (
     <HStack paddingTop={5} paddingBottom={7} paddingX={2} justifyContent="space-between">
-      <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Name</Text>
+      <Text style={{ fontSize: 30, fontWeight: 'bold' }}>{name}</Text>
       <Heart size={32} />
     </HStack>
   )
@@ -131,6 +131,7 @@ export default function RestaurantScreen() {
   const restaurantId = route.params.restaurantId
   const [ dishes, setDishes ] = useState([])
   const [ selected, setSelected ] = useState([])
+  const [ restaurantInfo, setRestaurantInfo ] = useState()
   const h = Dimensions.get('window').height
   const w = Dimensions.get('window').width
 
@@ -138,6 +139,15 @@ export default function RestaurantScreen() {
     try {
       const result = await getDishes(restaurantId)
       setDishes(result)
+    } catch (error) {
+      console.error(error)
+    }
+  }, [ restaurantId ])
+
+  const fetchRestaurant = useCallback(async () => {
+    try {
+      const restaurant = await getRestaurant(restaurantId)
+      setRestaurantInfo(restaurant)
     } catch (error) {
       console.error(error)
     }
@@ -153,14 +163,15 @@ export default function RestaurantScreen() {
 
   useEffect(() => {
     fetchDishes()
-  }, [ fetchDishes ])
+    fetchRestaurant()
+  }, [ fetchDishes, fetchRestaurant ])
 
   return (
     <View style={styles.container}>
       <ScrollView w='100%' height="100%">
         <VStack flex={1}>
           <RestaurantHeaderImage />
-          <RestaurantName />
+          {restaurantInfo && <RestaurantName name={restaurantInfo.name}/>}
           <SearchBar />
           {dishes && <MenuItemList data={dishes} onSelect={dish => onSelect(dish)} selected={selected} />}
         </VStack>
