@@ -1,6 +1,7 @@
 {
   "extends": [ "plugin:@danifoldi/eslint-presets/react-native-ts" ],
   "rules": {
+    "@typescript-eslint/member-ordering": "off",
     "unicorn/consistent-function-scoping": "off",
     "unicorn/no-abusive-eslint-disable": "off",
     "sort-keys": "off"

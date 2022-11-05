@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Button } from 'native-base'
 import { DeliveryMethod } from '../../types/types'
+import { deliveryFee } from '../../api/wolt'
 import DeliveryMethodSelector from './DeliveryMethodSelector'
 import PaymentMethodSelector from './PaymentMethodSelector'
-import { deliveryFee } from '../../api/wolt'
 
 
 console.log(process.env)
