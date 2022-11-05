@@ -43,11 +43,13 @@ export async function DeliveryFee(pickupAddress: string, dropoffAddress: string)
 }
 
 export async function DeliveryOrder(
-  merchant_id: string, pickupAddress: string, pickupComment: string, name: string, phoneno: string, address: string,
-  pickupLocation: LocationObject, contactName: string, contactPhoneno: string, dropoffComment: string,
-  supportEmail: string, supportPhoneNo: string, supportUrl: string, merchant_order_reference_id: string,
-  contentsDescriptions: string, contentsID: string, contentsTags: string, contentsCount: number,
-  tipsPreDelivery: string, tipsAmount: number, tipsCurrency: string, minPreparation: number, scheduledTime: string
+  merchant_id: string, pickupAddress: string, pickupComment: string, pickupsmsTracking: boolean,
+  name: string, phoneno: string, address: string, pickupLocation: LocationObject, contactName: string,
+  contactPhoneno: string, contactTracking: boolean, dropoffComment: string, supportEmail: string,
+  supportPhoneNo: string, supportUrl: string, isContact: boolean,
+  merchant_order_reference_id: string, contentsDescriptions: string, contentsID: string, contentsTags: string,
+  contentsCount: number, tipsPreDelivery: string, tipsAmount: number, tipsCurrency: string, minPreparation: number,
+  scheduledTime: string
 ) {
 
   const [ location, setLocation ] = useState<LocationObject | null>(null)
@@ -75,7 +77,7 @@ export async function DeliveryOrder(
       contact_details: {
         name: name,
         phone_number: phoneno,
-        send_tracking_link_sms: true
+        send_tracking_link_sms: pickupsmsTracking
       }
     },
     dropoff: {
@@ -89,7 +91,7 @@ export async function DeliveryOrder(
       contact_details: {
         name: contactName,
         phone_number: contactPhoneno,
-        send_tracking_link_sms: true
+        send_tracking_link_sms: contactTracking
       },
       comment: dropoffComment
     },
@@ -99,7 +101,7 @@ export async function DeliveryOrder(
       url: supportUrl
     },
     merchant_order_reference_id: merchant_order_reference_id,
-    is_no_contact: true,
+    is_no_contact: isContact,
     contents: [
       {
         count: contentsCount,
