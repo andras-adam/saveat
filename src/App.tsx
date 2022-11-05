@@ -1,16 +1,19 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { registerRootComponent } from 'expo'
 import { StatusBar } from 'expo-status-bar'
+import * as Location from 'expo-location'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Buildings, ForkKnife, MagnifyingGlass, UserCircle } from 'phosphor-react-native'
+import { NativeBaseProvider } from 'native-base'
 import SignInScreen from './screens/SignIn/SignInScreen'
 import HomeScreen from './screens/Home/HomeScreen'
 import SearchScreen from './screens/Search/SearchScreen'
 import ProfileScreen from './screens/Profile/ProfileScreen'
 import RestaurantScreen from './screens/Restaurant/RestaurantScreen'
 import RestaurantsScreen from './screens/Restaurants/RestaurantsScreen'
+import OrderScreen from './screens/Order/OrderScreen'
 import CheckoutScreen from './screens/Checkout/CheckoutScreen'
 import { AuthProvider, useAuth } from './hooks/useAuth'
 
@@ -62,8 +65,9 @@ function Navigation() {
               </Tabs.Navigator>
             )}
           </Authenticated.Screen>
-          <Unauthenticated.Screen name="Restaurant" component={RestaurantScreen} />
-          <Unauthenticated.Screen name="Checkout" component={CheckoutScreen} />
+          <Authenticated.Screen name="Restaurant" component={RestaurantScreen} />
+          <Authenticated.Screen name="Order" component={OrderScreen} />
+          <Authenticated.Screen name="Checkout" component={CheckoutScreen} />
         </Authenticated.Navigator>
       )}
     </NavigationContainer>
@@ -71,11 +75,24 @@ function Navigation() {
 }
 
 function App() {
+
+  // Request location permission
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync()
+      if (status !== 'granted') {
+        console.error('Permission to access location was denied')
+      }
+    })()
+  }, [])
+
   return (
     <Fragment>
-      <AuthProvider>
-        <Navigation />
-      </AuthProvider>
+      <NativeBaseProvider>
+        <AuthProvider>
+          <Navigation />
+        </AuthProvider>
+      </NativeBaseProvider>
       <StatusBar style="auto" />
     </Fragment>
   )
