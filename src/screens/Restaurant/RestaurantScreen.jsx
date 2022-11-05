@@ -1,11 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-native/no-color-literals */
+/* eslint-disable unicorn/prefer-module */
 /* eslint-disable react/prop-types */
 import { Image, VStack, HStack, Card, Box, Input, FlatList, Pressable, ScrollView, ZStack, Spacer, Center } from 'native-base'
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import { Heart, MagnifyingGlass } from 'phosphor-react-native'
-import { addDish, getDishes } from '../SignIn/firebaseHelper'
-import { useEffect } from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import { getDishes } from '../SignIn/firebaseHelper'
 import { colors } from '../../assets/colors'
 
 
@@ -20,7 +22,7 @@ const RestaurantHeaderImage = () => {
       <Image
         style={{ height: h / 6, width: w }}
         source={{
-          uri: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
+          uri: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80'
         }}
         alt="Restaurant header image"
         size="xl"
@@ -32,7 +34,7 @@ const RestaurantHeaderImage = () => {
 const RestaurantName = () => {
   return (
     <HStack paddingTop={5} paddingBottom={7} paddingX={2} justifyContent="space-between">
-      <Text style={{ fontSize: 30, fontWeight: "bold" }}>Name</Text>
+      <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Name</Text>
       <Heart size={32} />
     </HStack>
   )
@@ -49,7 +51,10 @@ const MenuItem = ({ info, onSelect, isSelected }) => {
         <VStack w={'100%'} alignItems='center'>
           <HStack w={'90%'} borderRadius={10} alignItems="center" justifyContent="space-between">
             <VStack pt={4} pb={2}>
-              <Text style={{ fontSize: 16, fontWeight: "500", color: 'white' }}>{info.name}</Text>
+              <HStack>
+                <Text style={{ fontSize: 16, fontWeight: '500', color: 'white' }}>{info.name}</Text>
+                {info.isLeftover === true && <Image size={"5"} source={require('../../assets/leaf.png')} alt='leaf' />}
+              </HStack>
               <Text style={{ fontSize: 10, width: w * 0.4, color: 'white', paddingVertical: 2 }}>{info.description}</Text>
               <Text style={{ fontSize: 14, fontWeight: '500', color: 'white' }}>{`${info.price} €`}</Text>
             </VStack>
@@ -57,7 +62,7 @@ const MenuItem = ({ info, onSelect, isSelected }) => {
               style={{ aspectRatio: 5 / 4, width: w * 0.3 }}
               borderRadius={10}
               source={{
-                uri: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
+                uri: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80'
               }}
               alt="Restaurant header image"
               size="xl"
@@ -86,7 +91,8 @@ const MenuItemList = ({ data, onSelect, selected }) => {
     <VStack flex={1}>
       {
         data.map((element, index) => {
-          return <MenuItem key={index} info={element} onSelect={dish => onSelect(dish)} isSelected={selected.includes(element)} />
+          return <MenuItem key={index} info={element} onSelect={dish => onSelect(dish)}
+            isSelected={selected.includes(element)} />
         })
       }
 
@@ -173,7 +179,7 @@ export default function RestaurantScreen() {
     }
   }
 
-  const onSelect = (dish) => {
+  const onSelect = dish => {
     if (selected.includes(dish)) {
       setSelected([...selected.filter(e => e !== dish)])
     } else {
@@ -216,7 +222,7 @@ export default function RestaurantScreen() {
       </ScrollView>
       {(selected.length > 0) && (
         <Center w={w} px={4} style={{ position: 'absolute', bottom: 10 }} >
-          <BottomButton style={{ width: '100%' }} selectedItems={selected} onPress={ () => navigation.navigate('Order', {dishes: selected}) } />
+          <BottomButton style={{ width: '100%' }} selectedItems={selected} onPress={() => navigation.navigate('Order', { dishes: selected })} />
         </Center>
       )}
     </View>
