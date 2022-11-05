@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/member-ordering */
-/* eslint-disable sort-keys */
-// This if here because chanign the order in which the functions are exported is cumbersome and time consuming
 import { getFirestore, collection, addDoc, GeoPoint, getDocs, doc, getDoc, setDoc, initializeFirestore, Firestore, updateDoc } from 'firebase/firestore'
 import { getStorage, getStream, ref} from 'firebase/storage'
 import { app } from '../../../firebase'
