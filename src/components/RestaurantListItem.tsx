@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Image } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
-import { Restaurant } from '../../types/types'
+import { Restaurant } from '../types/types'
 
 
 const styles = StyleSheet.create({
@@ -73,7 +73,7 @@ export default function RestaurantListItem({ item, small }: RestaurantListSmallI
         <View style={styles.cardTitleContainer}>
           <Text style={styles.cardTitle}>{item.title}</Text>
           {/* eslint-disable-next-line unicorn/prefer-module */}
-          {item.hasLeftover && <Image size={5} source={require('../../assets/leaf.png')} alt="Leftover symbol" />}
+          {item.hasLeftover && <Image size={5} source={require('../assets/leaf.png')} alt="Leftover symbol" />}
         </View>
         <View style={styles.cardDetails}>
           <Text style={styles.cardDetailsText}>{Math.round(item.distanceInMeters / 100) / 10} km</Text>

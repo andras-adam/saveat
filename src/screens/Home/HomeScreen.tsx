@@ -1,6 +1,6 @@
 import { ScrollView } from 'native-base'
 import { mockRestaurants, mockSavings } from '../../utils/mockData'
-import RestaurantList from './RestaurantList'
+import RestaurantList from '../../components/RestaurantList'
 import SavingsBanner from './SavingsBanner'
 
 

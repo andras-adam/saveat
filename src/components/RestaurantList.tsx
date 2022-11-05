@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import { Restaurant } from '../../types/types'
+import { Restaurant } from '../types/types'
 import RestaurantListItem from './RestaurantListItem'
 
 

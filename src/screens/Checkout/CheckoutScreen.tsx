@@ -1,9 +1,10 @@
 import { Fragment, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { Button, ScrollView } from 'native-base'
+import { ScrollView } from 'native-base'
 import { useRoute } from '@react-navigation/native'
 import { getTotalItemCountForOrderItems, getTotalPriceForOrderItems } from '../../utils/utils'
 import { DeliveryMethod } from '../../types/types'
+import FloatingButton from '../../components/FloatingButton'
 import DeliveryMethodSelector from './DeliveryMethodSelector'
 import PaymentMethodSelector from './PaymentMethodSelector'
 
@@ -23,15 +24,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
-  },
-  actionButtonContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0
-  },
-  actionButton: {
-    margin: 20
   }
 })
 
@@ -62,9 +54,7 @@ export default function CheckoutScreen() {
           </View>
         </View>
       </ScrollView>
-      <View style={styles.actionButtonContainer}>
-        <Button style={styles.actionButton} onPress={submit}>Press to confirm</Button>
-      </View>
+      <FloatingButton title="Press to confirm" onPress={submit} />
     </Fragment>
   )
 }

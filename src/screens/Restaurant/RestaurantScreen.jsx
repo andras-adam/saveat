@@ -2,13 +2,14 @@
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable unicorn/prefer-module */
 /* eslint-disable react/prop-types */
-import { Image, VStack, HStack, Card, Box, Input, Pressable, ScrollView, Spacer, Center } from 'native-base'
+import { Image, VStack, HStack, Card, Box, Input, Pressable, ScrollView } from 'native-base'
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import { Heart, MagnifyingGlass } from 'phosphor-react-native'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { getDishes, getRestaurant } from '../../api/firebaseHelper'
 import { colors } from '../../assets/colors'
+import FloatingButton from '../../components/FloatingButton'
 
 
 const RestaurantHeaderImage = () => {
@@ -18,7 +19,7 @@ const RestaurantHeaderImage = () => {
   return (
     <VStack>
       <Image
-        style={{ height: h / 6, width: w }}
+        style={{ height: h / 6, width: w, borderRadius: 12 }}
         source={{
           uri: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80'
         }}
@@ -47,7 +48,7 @@ const MenuItem = ({ info, onSelect, isSelected }) => {
     <Pressable py={2} onPress={() => onSelect(info)}>
       <Card p={0} style={{ backgroundColor: colors.tile }} justifyContent="space-around">
         <VStack w={'100%'} alignItems='center'>
-          <HStack w={'90%'} borderRadius={10} alignItems="center" justifyContent="space-between">
+          <HStack w={'90%'} borderRadius={12} alignItems="center" justifyContent="space-between">
             <VStack pt={4} pb={2}>
               <HStack>
                 <Text style={{ fontSize: 16, fontWeight: '500', color: 'white' }}>{info.name}</Text>
@@ -76,54 +77,31 @@ const MenuItem = ({ info, onSelect, isSelected }) => {
 const SearchBar = () => {
   return (
     <Box alignItems="center" paddingBottom={5}>
-      <Input mx="1" placeholder="Search..." w="80%" h={10} variant="rounded" InputLeftElement={<MagnifyingGlass size={20} />}
-      />
+      <Input mx="1" placeholder="Search..." w="80%" h={10} variant="rounded" InputLeftElement={<MagnifyingGlass size={20} />} />
     </Box>
   )
 }
 
 const MenuItemList = ({ data, onSelect, selected }) => {
   return (
-    // <FlatList
-    //   keyExtractor={(item, index) => index} data={data} renderItem={({ item }) => <MenuItem info={item} />} />
     <VStack flex={1}>
-      {
-        data.map((element, index) => {
-          return <MenuItem key={index} info={element} onSelect={dish => onSelect(dish)}
-            isSelected={selected.includes(element)} />
-        })
-      }
-
+      {data.map((element, index) => (
+        <MenuItem
+          key={index}
+          info={element}
+          onSelect={dish => onSelect(dish)}
+          isSelected={selected.includes(element)}
+        />
+      ))}
     </VStack>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20
+    padding: 10
   }
 })
-
-const BottomButton = ({ selectedItems, onPress }) => {
-  const total = selectedItems.map(element => element.price).reduce((partialSum, a) => partialSum + a, 0)
-
-  return (
-    <Pressable onPress={onPress} w={'100%'}>
-      <Card borderRadius={12} w='100%' bgColor={colors.button}>
-        <HStack alignItems={'center'}>
-          <Card borderRadius={50} p={3} bgColor={'black'} mr={6}>
-            <Center w={3} height={3}>
-              <Text style={{ fontWeight: 'bold', color: colors.button }}>{selectedItems.length}</Text>
-            </Center>
-          </Card>
-          <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 22 }}>View order</Text>
-          <Spacer flex={1} />
-          <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 22 }}>{`${total}€`}</Text>
-        </HStack>
-      </Card>
-    </Pressable>
-  )
-}
 
 export default function RestaurantScreen() {
   const navigation = useNavigation()
@@ -166,20 +144,25 @@ export default function RestaurantScreen() {
     fetchRestaurant()
   }, [ fetchDishes, fetchRestaurant ])
 
+  function getPrice() {
+    return selected.map(element => element.price).reduce((partialSum, a) => partialSum + a, 0)
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView w='100%' height="100%">
         <VStack flex={1}>
           <RestaurantHeaderImage />
-          {restaurantInfo && <RestaurantName name={restaurantInfo.name}/>}
+          {<RestaurantName name={restaurantInfo?.name}/>}
           <SearchBar />
           {dishes && <MenuItemList data={dishes} onSelect={dish => onSelect(dish)} selected={selected} />}
         </VStack>
       </ScrollView>
       {(selected.length > 0) && (
-        <Center w={w} px={4} style={{ position: 'absolute', bottom: 10 }} >
-          <BottomButton selectedItems={selected} onPress={() => navigation.navigate('Order', { dishes: selected })} />
-        </Center>
+        <FloatingButton
+          title={`View order — € ${getPrice()}`}
+          onPress={() => navigation.navigate('Order', { dishes: selected })}
+        />
       )}
     </View>
   )

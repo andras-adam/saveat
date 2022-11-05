@@ -3,7 +3,7 @@ import { FlatList } from 'native-base'
 import { useState, useEffect, useCallback } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { getDishes, getRestaurants } from '../../api/firebaseHelper'
-import RestaurantListItem from '../Home/RestaurantListItem'
+import RestaurantListItem from '../../components/RestaurantListItem'
 
 
 const styles = StyleSheet.create({
