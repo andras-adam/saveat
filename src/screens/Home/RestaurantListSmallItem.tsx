@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import { Restaurant } from '../../types/types'
 
 
@@ -37,8 +38,9 @@ interface RestaurantListSmallItemProps {
 }
 
 export default function RestaurantListSmallItem({ item }: RestaurantListSmallItemProps) {
+  const { navigate } = useNavigation<any>()
   return (
-    <TouchableOpacity style={styles.cardContainer}>
+    <TouchableOpacity style={styles.cardContainer} onPress={() => navigate('Restaurant', { id: item.id })}>
       <View style={[ styles.cardBanner, { backgroundColor: item.color }]} />
       <View style={styles.cardContent}>
         <Text style={styles.cardTitle}>{item.title}</Text>
