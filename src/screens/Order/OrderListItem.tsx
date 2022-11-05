@@ -1,32 +1,59 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image } from 'native-base'
 import { Minus, Plus } from 'phosphor-react-native'
 import { OrderItem } from '../../types/types'
 
 
 const styles = StyleSheet.create({
   orderItemContainer: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#f1f1f1',
     borderRadius: 10,
     flexDirection: 'row',
-    marginBottom: 20,
-    paddingVertical: 10,
+    paddingVertical: 20,
     paddingHorizontal: 20,
-    alignItems: 'center'
+    alignItems: 'flex-start',
+    borderBottomColor: '#ffffff',
+    borderBottomWidth: 2
   },
-  orderItemAmount: {
+  amountContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 18,
+    padding: 4,
+    backgroundColor: '#dddddd'
+  },
+  amountButton: {
+    borderRadius: 14,
+    padding: 6,
+    backgroundColor: '#ffffff'
+  },
+  amountText: {
     paddingHorizontal: 10
   },
-  orderItemButton: {
-    backgroundColor: '#f1f1f1',
-    borderRadius: 14,
-    padding: 6
-  },
-  orderItemTitle: {
+  dishContainer: {
+    flex: 1,
     paddingHorizontal: 20
   },
-  orderItemPrice: {
-    flex: 1,
-    textAlign: 'right'
+  dishTitle: {
+    fontWeight: 'bold',
+    paddingBottom: 4
+  },
+  dishText: {
+    fontSize: 13
+  },
+  dishPrice: {
+    fontWeight: 'bold',
+    paddingTop: 4
+  },
+  preview: {
+    width: 64,
+    height: 64,
+    borderRadius: 12
+  },
+  previewImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 12
   }
 })
 
@@ -38,19 +65,29 @@ interface OrderListItemProps {
 export default function OrderListItem({ item, changeAmount }: OrderListItemProps) {
   return (
     <View style={styles.orderItemContainer}>
-      <TouchableOpacity onPress={() => changeAmount(item.amount + 1)}>
-        <View style={styles.orderItemButton}>
-          <Plus size={16}/>
-        </View>
-      </TouchableOpacity>
-      <Text style={styles.orderItemAmount}>{item.amount}</Text>
-      <TouchableOpacity onPress={() => changeAmount(item.amount - 1)}>
-        <View style={styles.orderItemButton}>
-          <Minus size={16}/>
-        </View>
-      </TouchableOpacity>
-      <Text style={styles.orderItemTitle}>{item.title}</Text>
-      <Text style={styles.orderItemPrice}>€ {Math.round((item.amount * item.unitPrice * 100)) / 100}</Text>
+      <View style={styles.amountContainer}>
+        <TouchableOpacity onPress={() => changeAmount(item.amount + 1)}>
+          <View style={styles.amountButton}>
+            <Plus size={16}/>
+          </View>
+        </TouchableOpacity>
+        <Text style={styles.amountText}>{item.amount}</Text>
+        <TouchableOpacity onPress={() => changeAmount(item.amount - 1)}>
+          <View style={styles.amountButton}>
+            <Minus size={16}/>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.dishContainer}>
+        <Text style={styles.dishTitle}>{item.title}</Text>
+        {Array.from({ length: item.amount }).map((_, index) => (
+          <Text key={index} style={styles.dishText}>1 x item</Text>
+        ))}
+        <Text style={styles.dishPrice}>€ {Math.round((item.amount * item.unitPrice * 100)) / 100}</Text>
+      </View>
+      <View style={styles.preview}>
+        <Image style={styles.previewImage} source={{ uri: item.uri }} alt="Dish thumbnail" />
+      </View>
     </View>
   )
 }

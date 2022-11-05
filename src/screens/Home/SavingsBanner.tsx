@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     margin: 10,
     marginTop: 15,
-    backgroundColor: '#aeffad',
+    backgroundColor: '#CC4BC2',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 12,
-    backgroundColor: '#a0d79f'
+    backgroundColor: '#a874a5'
   },
   savingsTitle: {
     color: '#ffffff',
@@ -47,8 +47,8 @@ export default function SavingsBanner({ percentage, savedCO2, savedMoney }: Savi
         size={120}
         width={15}
         fill={percentage}
-        tintColor="#48483F"
-        backgroundColor="#D1D1CE"
+        tintColor="#52084a"
+        backgroundColor="#a874a5"
       >
         {fill => <Text style={styles.savingsPercentage}>{fill}%</Text>}
       </AnimatedCircularProgress>
