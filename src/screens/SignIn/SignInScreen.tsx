@@ -1,6 +1,5 @@
 import { Button, StyleSheet, Text, View } from 'react-native'
 import { useAuth } from '../../hooks/useAuth'
-import React from 'react'
 
 
 const styles = StyleSheet.create({

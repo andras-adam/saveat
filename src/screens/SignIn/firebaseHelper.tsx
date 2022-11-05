@@ -10,7 +10,7 @@ const db = getFirestore(app)
 const storage = getStorage(app)
 
 //  Adding datatypes
-interface UserDataType {
+export interface UserDataType {
   email: string
   geopoint?: GeoPoint
   location?: string
@@ -19,7 +19,7 @@ interface UserDataType {
   type: boolean
 }
 
-interface DishDataType {
+export interface DishDataType {
   amount: number
   category: string
   discount: number
@@ -27,7 +27,7 @@ interface DishDataType {
   name: string
   price: number
 }
-interface OrderDataType {
+export interface OrderDataType {
   clientID: string
   dishID: string
   estimatedTime: number
@@ -35,7 +35,7 @@ interface OrderDataType {
   status: boolean
   transport: string
 }
-interface RestaurantDataType {
+export interface RestaurantDataType {
   restaurantId: string
   geopoint: GeoPoint
   location: string
