@@ -2,9 +2,9 @@
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable unicorn/prefer-module */
 /* eslint-disable react/prop-types */
-import { Image, VStack, HStack, Card, Box, Input, Pressable, ScrollView } from 'native-base'
+import { Image, VStack, HStack, Card, Box, Input, Pressable, ScrollView, Center } from 'native-base'
 import { StyleSheet, Text, View, Dimensions } from 'react-native'
-import { Heart, MagnifyingGlass } from 'phosphor-react-native'
+import { Heart, MagnifyingGlass, SmileyMeh } from 'phosphor-react-native'
 import { useCallback, useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { getDishes, getRestaurant } from '../../api/firebaseHelper'
@@ -155,7 +155,17 @@ export default function RestaurantScreen() {
           <RestaurantHeaderImage />
           {<RestaurantName name={restaurantInfo?.name}/>}
           <SearchBar />
-          {dishes && <MenuItemList data={dishes} onSelect={dish => onSelect(dish)} selected={selected} />}
+          {
+            (dishes.length === 0)
+              ? (<Center flex={1} h={0.4 * h}>
+                <VStack alignItems={'center'} space={6}>
+                  <SmileyMeh size={50}/>
+                  <Text>No items yet</Text>
+                </VStack>
+              </Center>
+              )
+              : <MenuItemList data={dishes} onSelect={dish => onSelect(dish)} selected={selected} />
+          }
         </VStack>
       </ScrollView>
       {(selected.length > 0) && (

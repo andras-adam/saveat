@@ -88,11 +88,8 @@ const addDish = async (dish: DishDataType, restaurantId: string) => {
 
 const getDishes = async (restaurantId: string) => {
   const querySnapshot = await getDocs(collection(db, 'restaurants', restaurantId, 'dish'))
-  querySnapshot.forEach(doc => {
-    console.log(`${doc.id} => ${doc.data()}`)
-  })
-  const dishes = querySnapshot.docs.map(element => element.data() as DishDataType)
-  return dishes
+  console.log("hello")
+  return querySnapshot.docs.length === 0 ? ([] as DishDataType[]) : (querySnapshot.docs.map(element => element.data() as DishDataType))
 }
 
 const getDish = async (id: string) => {
