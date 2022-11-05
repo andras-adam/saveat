@@ -13,6 +13,7 @@ import RestaurantScreen from './screens/Restaurant/RestaurantScreen'
 import RestaurantsScreen from './screens/Restaurants/RestaurantsScreen'
 import CheckoutScreen from './screens/Checkout/CheckoutScreen'
 import { AuthProvider, useAuth } from './hooks/useAuth'
+import React from 'react'
 
 
 const colors = {
