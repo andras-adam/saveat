@@ -5,7 +5,6 @@ import { app } from '../../../firebase'
 import { useAuth } from '../../hooks/useAuth'
 
 
-
 const styles = StyleSheet.create({
   container: {
     padding: 20
