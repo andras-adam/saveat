@@ -23,7 +23,7 @@ interface DishDataType {
   amount: number
   category: string
   discount: number
-  ingredients: Array<string>
+  description: string
   name: string
   price: number
 }
@@ -79,7 +79,7 @@ const addDish = async (dish: DishDataType) => {
       amount: dish.amount,
       category: dish.category,
       discount: dish.discount,
-      ingredients: dish.ingredients,
+      description: dish.description,
       name: dish.name,
       price: dish.price
     })
@@ -94,7 +94,8 @@ const getDishes = async () => {
   querySnapshot.forEach(doc => {
     console.log(`${doc.id} => ${doc.data()}`)
   })
-  return querySnapshot.forEach(element => element.data() as DishDataType)
+  const dishes = querySnapshot.docs.map(element => element.data() as DishDataType)
+  return dishes
 }
 
 const getDish = async (id: string) => {

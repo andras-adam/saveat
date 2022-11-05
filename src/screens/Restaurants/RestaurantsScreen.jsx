@@ -4,6 +4,7 @@ import { GeoPoint } from 'firebase/firestore'
 import { Card, FlatList, HStack, Image, Pressable, Spacer, VStack } from 'native-base'
 import { useState, useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { colors } from '../../assets/colors'
 import { addRestaurant, getRestaurants } from '../SignIn/firebaseHelper'
 
 
@@ -28,7 +29,7 @@ const RestaurantTile = ({ info }) => {
 
   return (
     <Pressable py={2} onPress={() => navigation.navigate('Restaurant', { restaurantId: info.restaurantId })}>
-      <Card borderRadius={12} width={'100%'} shadow={'4'} bgColor='white' m={0} p={0}>
+      <Card borderRadius={12} width={'100%'} shadow={'4'} bgColor={colors.tile} m={0} p={0}>
         <VStack p={2}>
           <Image borderRadius={12} w={'100%'} h={'100'} source={{ uri: info.picUrl }} alt="food" />
           <Spacer h={2} />
