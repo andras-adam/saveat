@@ -4,7 +4,7 @@ import { Button, ScrollView } from 'native-base'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { getTotalPriceForOrderItems } from '../../utils/utils'
 import { OrderItem } from '../../types/types'
-import { DishDataType } from '../SignIn/firebaseHelper'
+import { DishDataType } from '../../api/firebaseHelper'
 import OrderListItem from './OrderListItem'
 
 

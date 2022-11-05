@@ -7,7 +7,7 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import { Heart, MagnifyingGlass } from 'phosphor-react-native'
 import { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { getDishes } from '../SignIn/firebaseHelper'
+import { getDishes } from '../../api/firebaseHelper'
 import { colors } from '../../assets/colors'
 
 

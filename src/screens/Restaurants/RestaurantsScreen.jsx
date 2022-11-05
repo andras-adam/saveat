@@ -7,7 +7,7 @@ import { Card, FlatList, HStack, Image, Pressable, Spacer, VStack, Text, Icon } 
 import { useState, useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { colors } from '../../assets/colors'
-import { addRestaurant, getDishes, getRestaurants } from '../SignIn/firebaseHelper'
+import { addRestaurant, getDishes, getRestaurants } from '../../api/firebaseHelper'
 
 
 const defaultImage = 'https://citinewsroom.com/wp-content/uploads/2021/07/Food.jpg'

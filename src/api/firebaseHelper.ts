@@ -1,6 +1,6 @@
 import { getFirestore, collection, addDoc, GeoPoint, getDocs, doc, getDoc, setDoc, initializeFirestore, Firestore, updateDoc } from 'firebase/firestore'
 import { getStorage, getStream, ref} from 'firebase/storage'
-import { app } from '../../../firebase'
+import { app } from '../../firebase'
 
 
 const db = getFirestore(app)
