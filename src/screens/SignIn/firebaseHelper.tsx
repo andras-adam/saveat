@@ -73,9 +73,9 @@ const getUser = async (id: string) => {
   return docSnap.data() as UserDataType
 }
 
-const addDish = async (dish: DishDataType) => {
+const addDish = async (dish: DishDataType, restaurantId: string) => {
   try {
-    const docRef = await addDoc(collection(db, 'users'), {
+    const docRef = await addDoc(collection(db, 'restaurants', restaurantId, 'dish'), {
       amount: dish.amount,
       category: dish.category,
       discount: dish.discount,
@@ -89,8 +89,8 @@ const addDish = async (dish: DishDataType) => {
   }
 }
 
-const getDishes = async () => {
-  const querySnapshot = await getDocs(collection(db, 'dishes'))
+const getDishes = async (restaurantId: string) => {
+  const querySnapshot = await getDocs(collection(db, 'restaurants', restaurantId, 'dish'))
   querySnapshot.forEach(doc => {
     console.log(`${doc.id} => ${doc.data()}`)
   })
