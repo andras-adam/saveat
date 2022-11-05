@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-native/no-color-literals */
 /* eslint-disable unicorn/prefer-module */
@@ -7,7 +8,7 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native'
 import { Heart, MagnifyingGlass } from 'phosphor-react-native'
 import { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { getDishes } from '../SignIn/firebaseHelper'
+import { getDishes, getRestaurant } from '../SignIn/firebaseHelper'
 import { colors } from '../../assets/colors'
 
 
@@ -31,10 +32,10 @@ const RestaurantHeaderImage = () => {
   )
 }
 
-const RestaurantName = () => {
+const RestaurantName = ({ name }) => {
   return (
     <HStack paddingTop={5} paddingBottom={7} paddingX={2} justifyContent="space-between">
-      <Text style={{ fontSize: 30, fontWeight: 'bold' }}>Name</Text>
+      <Text style={{ fontSize: 30, fontWeight: 'bold' }}>{name}</Text>
       <Heart size={32} />
     </HStack>
   )
@@ -165,6 +166,7 @@ export default function RestaurantScreen() {
   const navigation = useNavigation()
   const [dishes, setDishes] = useState()
   const [selected, setSelected] = useState([])
+  const [restaurantInfo, setRestaurantInfo] = useState()
   const route = useRoute()
   const restaurantId = route.params.restaurantId
   const h = Dimensions.get('window').height
@@ -184,6 +186,15 @@ export default function RestaurantScreen() {
       setSelected([...selected.filter(e => e !== dish)])
     } else {
       setSelected([...selected, dish])
+    }
+  }
+
+  const fetchRestaurant = async () => {
+    try {
+      const restaurant = await getRestaurant(restaurantId)
+      setRestaurantInfo(restaurant)
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -208,6 +219,7 @@ export default function RestaurantScreen() {
     //   insertDish(element)
     // })
     fetchDishes()
+    fetchRestaurant()
   }, [])
 
   return (
@@ -215,7 +227,7 @@ export default function RestaurantScreen() {
       <ScrollView w='100%' height="100%">
         <VStack flex={1}>
           <RestaurantHeaderImage />
-          <RestaurantName />
+          {restaurantInfo && <RestaurantName name={restaurantInfo.name}/>}
           <SearchBar />
           {dishes && <MenuItemList data={dishes} onSelect={dish => onSelect(dish)} selected={selected} />}
         </VStack>
