@@ -1,6 +1,6 @@
 import { ScrollView } from 'native-base'
 import { mockRestaurants, mockSavings } from '../../utils/mockData'
-import RestaurantListSmall from './RestaurantListSmall'
+import RestaurantList from './RestaurantList'
 import SavingsBanner from './SavingsBanner'
 
 
@@ -12,10 +12,10 @@ export default function HomeScreen() {
         savedCO2={mockSavings.co2}
         savedMoney={mockSavings.money}
       />
-      <RestaurantListSmall title="Offers" items={mockRestaurants} />
-      <RestaurantListSmall title="Order again" items={mockRestaurants} />
-      <RestaurantListSmall title="New restaurants" items={mockRestaurants} />
-      <RestaurantListSmall title="Favorites" items={mockRestaurants} />
+      <RestaurantList small title="Offers" items={mockRestaurants} />
+      <RestaurantList small title="Order again" items={mockRestaurants} />
+      <RestaurantList small title="New restaurants" items={mockRestaurants} />
+      <RestaurantList small title="Favorites" items={mockRestaurants} />
     </ScrollView>
   )
 }

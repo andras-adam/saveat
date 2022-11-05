@@ -111,7 +111,7 @@ const BottomButton = ({ selectedItems, onPress }) => {
     <Pressable onPress={onPress} w={'100%'}>
       <Card borderRadius={12} w='100%' bgColor={colors.button}>
         <HStack alignItems={'center'}>
-          <Card borderRadius={'100%'} p={3} bgColor={'black'} mr={6}>
+          <Card borderRadius={50} p={3} bgColor={'black'} mr={6}>
             <Center w={3} height={3}>
               <Text style={{ fontWeight: 'bold', color: colors.button }}>{selectedItems.length}</Text>
             </Center>
@@ -128,7 +128,7 @@ const BottomButton = ({ selectedItems, onPress }) => {
 export default function RestaurantScreen() {
   const navigation = useNavigation()
   const route = useRoute()
-  const restaurantId = route.params.restaurantId
+  const restaurantId = route.params.id
   const [ dishes, setDishes ] = useState([])
   const [ selected, setSelected ] = useState([])
   const [ restaurantInfo, setRestaurantInfo ] = useState()

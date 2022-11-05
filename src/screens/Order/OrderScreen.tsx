@@ -23,12 +23,6 @@ const styles = StyleSheet.create({
   }
 })
 
-const mockOrderItems: OrderItem[] = [
-  { id: '0', title: 'Salad', unitPrice: 5.99, amount: 1 },
-  { id: '1', title: 'Rice', unitPrice: 4.25, amount: 1 },
-  { id: '2', title: 'Beef', unitPrice: 12.49, amount: 1 }
-]
-
 export default function OrderScreen() {
   const { navigate } = useNavigation<any>()
   const route = useRoute<any>()

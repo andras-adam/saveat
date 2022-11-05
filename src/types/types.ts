@@ -15,7 +15,8 @@ export interface Restaurant {
   id: string
   address: string
   title: string
-  color: string
   distanceInMeters: number
   timeInMinutes: number
+  uri: string
+  hasLeftover?: boolean
 }
