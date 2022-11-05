@@ -118,7 +118,7 @@ export async function DeliveryOrder(
       }
     ],
     min_preparation_time_minutes: minPreparation,
-    scheduled_dropoff_time: scheduledTime
+    scheduled_dropoff_time: scheduledTime // Must be in ISO8601
   }
   const body = JSON.stringify(data)
   const result = await fetch(baseUrl + pathname, { method: 'POST', headers, body })
@@ -247,7 +247,7 @@ export async function ShipmentPromises(
     lon: LocationSet?.coords.longitude,
     language: language,
     min_preparation_time_minutes: minTime,
-    scheduled_dropoff_time: scheduledTime
+    scheduled_dropoff_time: scheduledTime // Must be in ISO8601
   }
   const body = JSON.stringify(data)
   const result = await fetch(baseUrl + pathname, { method: 'POST', headers, body })
