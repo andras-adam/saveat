@@ -126,12 +126,13 @@ export async function DeliveryOrder(
 }
 
 export async function Deliveries(
-  minPreparation: number, pickupComment: string, dropoffComment: string, dropoffTime: string, priceAmount: number,
-  priceCurrency: string, recipientName: string, recipientPhoneNo: string, recipientMail: string, parcelWeight: number,
-  parcelWidth: number, parcelHeight: number, parceldepth: number, parcelDescription: string, parcelID: string,
-  parcelAge: number, parcelIDVer: string, parcelTags: string, shipment_promise_id: string,
-  supportEmail: string, supportPhoneNo: string, supportUrl: string, merchant_order_reference_id: string,
-  smsRecieved: string, smsPickedUp: string, tipsType: string,  tipsAmount: number, tipsCurrency: string
+  venue_id: string, minPreparation: number, pickupComment: string, dropoffComment: string, dropoffTime: string,
+  priceAmount: number, priceCurrency: string, recipientName: string, recipientPhoneNo: string,
+  recipientMail: string, parcelWeight: number, parcelWidth: number, parcelHeight: number, parceldepth: number,
+  parcelDescription: string, parcelID: string, parcelAge: number, parcelIDVer: string, parcelTags: string,
+  shipment_promise_id: string, supportEmail: string, supportPhoneNo: string, supportUrl: string,
+  merchant_order_reference_id: string, smsRecieved: string, smsPickedUp: string, tipsType: string,
+  tipsAmount: number, tipsCurrency: string
 
 
 ) {
@@ -146,7 +147,7 @@ export async function Deliveries(
   const currentLocation = await Location.getCurrentPositionAsync({})
   SetLocation(currentLocation)
 
-  const pathname = `/merchants/${merchantId}/delivery-fee`
+  const pathname = `/v1/venues/${venue_id}/deliveries`
   const data
     = {
       pickup: {
@@ -223,7 +224,7 @@ export async function Deliveries(
 }
 
 export async function ShipmentPromises(
-  street: string, city: string, post_code: string,
+  venue_id: string, street: string, city: string, post_code: string,
   language: string, minTime: number, scheduledTime: string
 ) {
   const [ LocationSet, SetLocation ] = useState<LocationObject | null>(null)
@@ -237,7 +238,7 @@ export async function ShipmentPromises(
   const currentLocation = await Location.getCurrentPositionAsync({})
   SetLocation(currentLocation)
 
-  const pathname = `/merchants/${merchantId}/delivery-fee`
+  const pathname = `/v1/venues/${venue_id}/shipment-promises`
   const data = {
     street: street,
     city: city,
