@@ -1,33 +1,21 @@
 import { Fragment, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Button, ScrollView } from 'native-base'
+import { StyleSheet } from 'react-native'
+import { ScrollView } from 'native-base'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { getTotalPriceForOrderItems } from '../../utils/utils'
 import { OrderItem } from '../../types/types'
 import { DishDataType } from '../../api/firebaseHelper'
+import FloatingButton from '../../components/FloatingButton'
 import OrderListItem from './OrderListItem'
 
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#ffffff'
-  },
-  actionButtonContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0
-  },
-  actionButton: {
-    margin: 20
   }
 })
 
-const mockOrderItems: OrderItem[] = [
-  { id: '0', title: 'Salad', unitPrice: 5.99, amount: 1 },
-  { id: '1', title: 'Rice', unitPrice: 4.25, amount: 1 },
-  { id: '2', title: 'Beef', unitPrice: 12.49, amount: 1 }
-]
+const uri = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80'
 
 export default function OrderScreen() {
   const { navigate } = useNavigation<any>()
@@ -37,7 +25,8 @@ export default function OrderScreen() {
     id: String(index),
     title: e.name,
     unitPrice: e.price,
-    amount: 1
+    amount: 1,
+    uri
   }))
 
   const [ items, setItems ] = useState<OrderItem[]>(orderItems)
@@ -62,11 +51,10 @@ export default function OrderScreen() {
           />
         ))}
       </ScrollView>
-      <View style={styles.actionButtonContainer}>
-        <Button style={styles.actionButton} onPress={() => navigate('Checkout', { items })}>
-          {`Go to checkout — € ${getTotalPriceForOrderItems(items)}`}
-        </Button>
-      </View>
+      <FloatingButton
+        title={`Go to checkout — € ${getTotalPriceForOrderItems(items)}`}
+        onPress={() => navigate('Checkout', { items })}
+      />
     </Fragment>
   )
 }

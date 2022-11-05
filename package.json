@@ -19,7 +19,7 @@
     "@react-navigation/native-stack": "^6.9.1",
     "expo": "~46.0.16",
     "expo-localization": "~13.1.0",
-    "expo-location": "^14.3.0",
+    "expo-location": "~14.3.0",
     "expo-status-bar": "~1.4.0",
     "firebase": "^9.13.0",
     "native-base": "^3.4.21",
@@ -37,11 +37,11 @@
     "react-native-web": "~0.18.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
+    "@babel/core": "^7.18.6",
     "@danifoldi/eslint-plugin-eslint-presets": "^1.8.3",
-    "@types/react": "~18.0.14",
+    "@types/react": "~18.0.0",
     "@types/react-native": "~0.69.1",
     "eslint": "8.26.0",
-    "typescript": "~4.3.5"
+    "typescript": "^4.6.3"
   }
 }

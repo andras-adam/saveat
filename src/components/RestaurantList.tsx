@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import { Restaurant } from '../../types/types'
-import RestaurantListSmallItem from './RestaurantListSmallItem'
+import { Restaurant } from '../types/types'
+import RestaurantListItem from './RestaurantListItem'
 
 
 const styles = StyleSheet.create({
@@ -16,26 +16,28 @@ const styles = StyleSheet.create({
     paddingVertical: 20
   },
   listSeparator: {
-    width: 10
+    width: 10,
+    height: 10
   }
 })
 
 interface RestaurantSmallListProps {
-  title: string
+  title?: string
   items: Restaurant[]
+  small?: boolean
 }
 
-export default function RestaurantListSmall({ title, items }: RestaurantSmallListProps) {
+export default function RestaurantList({ title, items, small }: RestaurantSmallListProps) {
   return (
     <Fragment>
-      <Text style={styles.listTitle}>{title}</Text>
+      {title && <Text style={styles.listTitle}>{title}</Text>}
       <FlatList
         data={items}
-        horizontal
+        horizontal={!!small}
         contentContainerStyle={styles.listContainer}
         ItemSeparatorComponent={() => <View style={styles.listSeparator} />}
         renderItem={({ item, index }) => (
-          <RestaurantListSmallItem key={index} item={item} />
+          <RestaurantListItem key={index} item={item} small={small} />
         )}
       />
     </Fragment>

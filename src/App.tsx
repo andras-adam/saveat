@@ -13,6 +13,7 @@ import RestaurantScreen from './screens/Restaurant/RestaurantScreen'
 import RestaurantsScreen from './screens/Restaurants/RestaurantsScreen'
 import OrderScreen from './screens/Order/OrderScreen'
 import CheckoutScreen from './screens/Checkout/CheckoutScreen'
+import CompletedSceen from './screens/Completed/CompletedScreen'
 
 
 const colors = {
@@ -53,6 +54,7 @@ function Navigation() {
         <Stack.Screen name="Restaurant" component={RestaurantScreen} />
         <Stack.Screen name="Order" component={OrderScreen} />
         <Stack.Screen name="Checkout" component={CheckoutScreen} />
+        <Stack.Screen name="Completed" component={CompletedSceen} />
       </Stack.Navigator>
     </NavigationContainer>
   )

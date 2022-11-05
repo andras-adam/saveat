@@ -1,5 +1,5 @@
-import { getFirestore, collection, addDoc, GeoPoint, getDocs, doc, getDoc, setDoc, initializeFirestore, Firestore, updateDoc } from 'firebase/firestore'
-import { getStorage, getStream, ref} from 'firebase/storage'
+import { getFirestore, collection, addDoc, GeoPoint, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { getStorage } from 'firebase/storage'
 import { app } from '../../firebase'
 
 
@@ -131,7 +131,7 @@ const getOrder = async (id: string) => {
 const addRestaurant = async (restaurant: RestaurantDataType) => {
   try {
     const docRef = await addDoc(collection(db, 'restaurants'), {
-      restaurantId: "0",
+      restaurantId: '0',
       geopoint: restaurant.geopoint,
       location: restaurant.location,
       name: restaurant.name,
