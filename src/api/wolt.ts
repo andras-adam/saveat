@@ -1,12 +1,11 @@
 import * as Location from 'expo-location'
 import { LocationObject } from 'expo-location'
 import { useState } from 'react'
-import { env } from '../../config'
 
 
 const baseUrl = 'https://daas-public-api.development.dev.woltapi.com'
-const merchantId = env.WOLT_MERCHANT_ID
-const apiKey = env.WOLT_API_KEY
+const merchantId = process.env.WOLT_MERCHANT_ID
+const apiKey = process.env.WOLT_API_KEY
 const headers = { 'content-type': 'application/json', 'authorization': `Bearer ${apiKey}` }
 
 async function getCurrentAddress(): Promise<string> {
