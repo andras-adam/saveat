@@ -2,7 +2,7 @@
 
 ## Usage
 
-1. Dowloand the saveat.apk file:
+1. Download the saveat.apk file:
 ```
 https://github.com/NeoAren/saveat/releases/tag/v1.0.0
 ```
