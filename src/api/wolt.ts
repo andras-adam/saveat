@@ -8,18 +8,25 @@ const merchantId = process.env.WOLT_MERCHANT_ID
 const apiKey = process.env.WOLT_API_KEY
 const headers = { 'content-type': 'application/json', 'authorization': `Bearer ${apiKey}` }
 
-export async function DeliveryFee(pickupAddress: string, dropoffAddress: string) {
-  const [ LocationSet, SetLocation ] = useState<LocationObject | null>(null)
+export async function deliveryFee(pickupAddress: string) {
 
+  // Check for permission
   const { status } = await Location.requestForegroundPermissionsAsync()
   if (status !== 'granted') {
     console.log('Permission to access location was denied')
     return
   }
 
+  // Calculate dropoff address
   const currentLocation = await Location.getCurrentPositionAsync({})
-  SetLocation(currentLocation)
+  const [ currentAddress ] = await Location.reverseGeocodeAsync({
+    latitude: currentLocation.coords.latitude,
+    longitude: currentLocation.coords.longitude
+  })
+  const { city, postalCode, street, streetNumber } = currentAddress
+  const dropoffAddress = `${street} ${streetNumber}, ${postalCode} ${city}`
 
+  // Send request
   const pathname = `/merchants/${merchantId}/delivery-fee`
   const data = {
     pickup: {
@@ -29,11 +36,7 @@ export async function DeliveryFee(pickupAddress: string, dropoffAddress: string)
     },
     dropoff: {
       location: {
-        formatted_address: dropoffAddress,
-        coordinates: {
-          lat: LocationSet?.coords.latitude,
-          lon: LocationSet?.coords.longitude
-        }
+        formatted_address: dropoffAddress
       }
     }
   }

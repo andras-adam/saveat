@@ -50,7 +50,7 @@ export default function SavingsBanner({ percentage, savedCO2, savedMoney }: Savi
         tintColor="#52084a"
         backgroundColor="#a874a5"
       >
-        {fill => <Text style={styles.savingsPercentage}>{fill}%</Text>}
+        {fill => <Text style={styles.savingsPercentage}>{Math.round(fill)}%</Text>}
       </AnimatedCircularProgress>
       <View style={styles.savingsStatistics}>
         <Text style={styles.savingsTitle}>CO2 saved</Text>

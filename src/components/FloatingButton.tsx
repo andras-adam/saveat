@@ -15,6 +15,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#CC4BC2'
   },
+  actionButtonDisabled: {
+    backgroundColor: '#a871a5'
+  },
   actionButtonText: {
     color: '#ffffff',
     padding: 12
@@ -24,12 +27,17 @@ const styles = StyleSheet.create({
 interface FloatingButtonProps {
   title: string
   onPress: () => unknown
+  disabled?: boolean
 }
 
-export default function FloatingButton({ title, onPress }: FloatingButtonProps) {
+export default function FloatingButton({ title, onPress, disabled }: FloatingButtonProps) {
   return (
     <View style={styles.actionButtonContainer}>
-      <TouchableOpacity style={styles.actionButton} activeOpacity={0.8} onPress={onPress}>
+      <TouchableOpacity
+        style={[ styles.actionButton, disabled && styles.actionButtonDisabled ]}
+        activeOpacity={0.8}
+        onPress={disabled ? undefined : onPress}
+      >
         <Text style={styles.actionButtonText}>{title}</Text>
       </TouchableOpacity>
     </View>
