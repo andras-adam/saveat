@@ -59,7 +59,6 @@ export default function CheckoutScreen() {
       identifier: item.id,
       tags: []
     }))
-    console.log(contents)
     deliveryOrder(mockPickupAddress, contents).then(data => {
       navigation.navigate('Completed', { trackingUrl: data.tracking.url })
     })
