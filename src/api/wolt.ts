@@ -8,26 +8,26 @@ const merchantId = process.env.WOLT_MERCHANT_ID
 const apiKey = process.env.WOLT_API_KEY
 const headers = { 'content-type': 'application/json', 'authorization': `Bearer ${apiKey}` }
 
-export async function deliveryFee(pickupAddress: string) {
-
+async function getCurrentAddress(): Promise<string> {
   // Check for permission
   const { status } = await Location.requestForegroundPermissionsAsync()
   if (status !== 'granted') {
     console.log('Permission to access location was denied')
-    return
+    return ''
   }
-
-  // Calculate dropoff address
+  // Calculate the current address
   const currentLocation = await Location.getCurrentPositionAsync({})
   const [ currentAddress ] = await Location.reverseGeocodeAsync({
     latitude: currentLocation.coords.latitude,
     longitude: currentLocation.coords.longitude
   })
   const { city, postalCode, street, streetNumber } = currentAddress
-  const dropoffAddress = `${street} ${streetNumber}, ${postalCode} ${city}`
+  return `${street} ${streetNumber}, ${postalCode} ${city}`
+}
 
-  // Send request
+export async function deliveryFee(pickupAddress: string) {
   const pathname = `/merchants/${merchantId}/delivery-fee`
+  const dropoffAddress = await getCurrentAddress()
   const data = {
     pickup: {
       location: {
@@ -39,6 +39,45 @@ export async function deliveryFee(pickupAddress: string) {
         formatted_address: dropoffAddress
       }
     }
+  }
+  const body = JSON.stringify(data)
+  const result = await fetch(baseUrl + pathname, { method: 'POST', headers, body })
+  return result.json()
+}
+
+export async function deliveryOrder(pickupAddress: string, contents: object[]) {
+  const pathname = `/merchants/${merchantId}/delivery-order`
+  const dropoffAddress = await getCurrentAddress()
+  const data = {
+    pickup: {
+      location: {
+        formatted_address: pickupAddress
+      },
+      contact_details: {
+        name: 'John Doe',
+        phone_number: '+358501235467',
+        send_tracking_link_sms: false
+      }
+    },
+    dropoff: {
+      location: {
+        formatted_address: dropoffAddress
+      },
+      contact_details: {
+        name: 'John Doe',
+        phone_number: '+358501235467',
+        send_tracking_link_sms: false
+      }
+    },
+    customer_support: {
+      email: 'test@example.com',
+      phone_number: '+358501235467',
+      url: 'https://example.com'
+    },
+    is_no_contact: true,
+    contents: contents,
+    tips: [],
+    min_preparation_time_minutes: 5
   }
   const body = JSON.stringify(data)
   const result = await fetch(baseUrl + pathname, { method: 'POST', headers, body })

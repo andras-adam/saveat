@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { getTotalItemCountForOrderItems, getTotalPriceForOrderItems } from '../../utils/utils'
 import { DeliveryMethod } from '../../types/types'
 import FloatingButton from '../../components/FloatingButton'
-import { deliveryFee } from '../../api/wolt'
+import { deliveryFee, deliveryOrder } from '../../api/wolt'
 import DeliveryMethodSelector from './DeliveryMethodSelector'
 import PaymentMethodSelector from './PaymentMethodSelector'
 
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
 })
 
 const mockCards = [ 'Nordea', 'Google Pay', 'Edenred' ]
+const mockPickupAddress = 'Leppavaarankatu 3, 02610 Espoo'
 
 export default function CheckoutScreen() {
   const [ deliveryMethod, setDeliveryMethod ] = useState(DeliveryMethod.Bicycle)
@@ -41,21 +42,27 @@ export default function CheckoutScreen() {
 
   // Fetch the delivery fee and ETA when the screen is opened
   useEffect(() => {
-    const pickupAddress = 'Tietotie 1, 02150 Espoo'
-    deliveryFee(pickupAddress).then(data => {
+    deliveryFee(mockPickupAddress).then(data => {
       setFee(data.fee.amount / 100)
       setEta(data.time_estimate_minutes)
       setDisabled(false)
     })
-  })
+  }, [])
 
   // Create the delivery
   function submit() {
     if (disabled) return
-    // setDisabled(true)
-    console.log('create delivery')
-    // setTimeout()
-    navigation.navigate('Completed')
+    setDisabled(true)
+    const contents = route.params.items.map((item: any) => ({
+      count: item.amount,
+      description: item.title,
+      identifier: item.id,
+      tags: []
+    }))
+    console.log(contents)
+    deliveryOrder(mockPickupAddress, contents).then(data => {
+      navigation.navigate('Completed', { trackingUrl: data.tracking.url })
+    })
   }
 
   return (
